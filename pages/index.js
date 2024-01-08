@@ -66,6 +66,7 @@ import {
    faDragon,
    faScroll,
    faPuzzlePiece,
+   faCircleDot,
 } from '@fortawesome/free-solid-svg-icons'
 
 // Local Components.
@@ -244,7 +245,13 @@ export default function Game () {
       if (card.flipped) {
          console.log ("Card is won : " + card.flipped);
          console.log ("Card is     : " + JSON.stringify(card));
+         console.log ("Board is    : ", board);
          // AKJC HERE - set to Cyan Dot and call setBoard.
+         let thisBoard = JSON.parse(JSON.stringify(board));
+         thisBoard[card.id].icon = faCircleDot;
+         setBoard(thisBoard);
+         // AKJC HERE : Something else is resetting it and how is only one magically being flipped at a time?
+         // AKJC HERE : flipCard could be re-written from scratch.
       }
       /*
       let { won, wonAll } = flipCard (card, numClicks, setNumClicks, board, setBoard);
