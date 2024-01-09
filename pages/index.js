@@ -108,6 +108,7 @@ export default function Game () {
 
    const numCardsRef                               = useRef();
    const instructionsRef                           = useRef();
+   const boardRef                                  = useRef(board);
 
    // When all loaded up, then shuffle the cards to avoid a hydration error.
    // useState (shuffleCards(initBoard.slice()) gave hydration errors.
@@ -117,6 +118,7 @@ export default function Game () {
    useEffect(() => {
       let shuffledBoard = shuffleCards(initBoard.slice(), numCards);
       setBoard        (shuffledBoard);
+      boardRef.current  = shuffledBoard;
       let currentScores = getScores();
       setScores ((scores) => currentScores);
    }, [numCards])
@@ -125,6 +127,7 @@ export default function Game () {
    function clearBoard () {
       let shuffledCards = shuffleCards(initBoard.slice(), numCards);
       setBoard(shuffledCards);
+      boardRef.current  = shuffledCards;
       setWonPlay(false);
       setWonAllPlay(false);
       setNumClicks(0);
@@ -134,14 +137,26 @@ export default function Game () {
       setTimerAction ((timerAction) => action);
    }
    function chooseRandomTyle () {
-      let cardNum   = Math.floor(Math.random() * board.length);
-      let thisBoard = JSON.parse(JSON.stringify(board));
+
+      let thisBoard = JSON.parse(JSON.stringify(boardRef.current));
+
+      // Get non-won tyles to choose a random index from.
+      //
+      let nonWonArr = [];
+      thisBoard.forEach((thisCard, index) => {
+         if (!thisCard.won) {
+            nonWonArr.push(index);
+         }
+      });
+      let cardNum = nonWonArr[Math.floor(Math.random() * nonWonArr.length)];
 
       // Clear all flipped cards/tyles and set the random one to be flipped.
       //
       thisBoard.forEach((thisCard, index) => {
+         thisBoard[index].flipped = false;
          if (index === cardNum || thisCard.won) thisBoard[index].flipped = true;
       });
+      boardRef.current = thisBoard;
       setBoard((b) => thisBoard);
    }
    function startStopGame () {
@@ -149,7 +164,7 @@ export default function Game () {
          clearInterval (gameIntervalId);
          setGameStarted (false);
       } else {
-         setGameIntervalId (setInterval(chooseRandomTyle, 1000));
+         setGameIntervalId (setInterval(chooseRandomTyle, 3000));
          setGameStarted (true);
       }
    }
@@ -250,9 +265,10 @@ export default function Game () {
    function handleTyleClick (card) {
       if (card.flipped) {
          console.log ("Won card : ", card);
-         let thisBoard           = JSON.parse(JSON.stringify(board));
+         let thisBoard           = JSON.parse(JSON.stringify(boardRef.current));
          thisBoard[card.id].icon = faCircleDot;
          thisBoard[card.id].won  = true;
+         boardRef.current = thisBoard;
          setBoard((b) => thisBoard);
       } else {
          console.log ("Card is missed : " + card.flipped);

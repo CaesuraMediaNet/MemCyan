@@ -18,7 +18,6 @@ export default function Card ({id, icon, width, height, clicked, flipped, won, c
         width   : "100%",
     }
     let blankStyle         = {...iconStyle, color   : "dimgray"};
-    // Was : let selectedStyle      = {...iconStyle, border  : "1px solid green", borderRadius : "0.2rem",};
     let selectedStyle      = {...iconStyle};
     let wonStyle           = {...iconStyle, opacity : 0.6};
 
@@ -28,7 +27,7 @@ export default function Card ({id, icon, width, height, clicked, flipped, won, c
     let reduceWonBigIconStyle      = {...wonStyle,      width : "75%"};
     if (cardName.match (/Moon|Brush|Lemon|Bell|HourglassStart/i)) {
         selectedStyle = reduceSelectedBigIconStyle;
-      wonStyle      = reduceWonBigIconStyle;
+        wonStyle      = reduceWonBigIconStyle;
     }
     return (
         <div className={flipped ? styles.cardStyleFlipped : styles.cardStyle} onClick={clicked} >
