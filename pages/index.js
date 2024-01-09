@@ -359,7 +359,7 @@ export default function Game () {
                         title={"Privacy Policy"}
                         rel="nofolow"
                         target="_blank"
-                        style={{float : 'right', color : "#2dce89"}}
+                        style={{float : 'right', color : "cyan"}}
                      >
                         <FontAwesomeIcon
                            className={styles.navIconPrivacy}
