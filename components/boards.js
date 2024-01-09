@@ -36,7 +36,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 
 export const initBoard = [
-   {id : 0,   icon : faEnvelope,          cardName : "Envelope,",         flipped : false, won : false},
+   {id : 0,   icon : faEnvelope,          cardName : "Envelope",          flipped : false, won : false},
    {id : 1,   icon : faHippo,             cardName : "Hippo",             flipped : false, won : false},
    {id : 2,   icon : faUmbrella,          cardName : "Umbrella",          flipped : false, won : false},
    {id : 3,   icon : faGift,              cardName : "Gift",              flipped : false, won : false},

@@ -16,7 +16,7 @@
 //
 import Head from 'next/head';
 import Image from 'next/image';
-import styles from '../styles/memtyles.module.css';
+import styles from '../styles/cyandot.module.css';
 import Layout, { siteTitle } from '../components/layout';
 
 // React.js
@@ -263,8 +263,24 @@ export default function Game () {
    //
    function handleTyleClick (card) {
       setNumClicks((nc) => nc + 1);
-      if (card.flipped) {
-         let thisBoard               = JSON.parse(JSON.stringify(boardRef.current));
+      let thisBoard               = JSON.parse(JSON.stringify(boardRef.current));
+
+      // Difficulty level two : if a tyle matches one already won, lose both.
+      //
+      let loseBoth = false;
+      thisBoard.forEach((thisCard, index) => {
+
+         // AKJC HERE : thisCard.cardName for won ones is "faCircle" - so find another identifier ...
+         if (card.cardName === thisCard.cardName && thisCard.won) {
+            console.log ("Lose both");
+            thisBoard[index].won = false;
+            loseBoth = true;
+         }
+      });
+      if (loseBoth) {
+         boardRef.current = thisBoard;
+         setBoard((b) => thisBoard);
+      } else if (card.flipped) {
          thisBoard[card.id].icon     = faCircle;
          thisBoard[card.id].won      = true;
          thisBoard[card.id].colour   = 'cyan';
@@ -304,10 +320,10 @@ export default function Game () {
                   ?
                </h1>
                <Row>
-                  <Col md={12}>
+                  <Col md={6}>
                      <StartStopButton />
                   </Col>
-                  <Col md={12}>
+                  <Col md={6}>
                      <ClearButton />
                   </Col>
                   <Col md={12}>
@@ -350,7 +366,7 @@ export default function Game () {
                   </Col>
                   <Col>
                      <div className={styles.googlePlayIcon}>
-                        <a target="_blank" href='https://play.google.com/store/apps/details?id=com.memtyles&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/></a>
+                        <a target="_blank" href='https://play.google.com/store/apps/details?id=com.cyandot&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/></a>
                      </div>
                   </Col>
                   <Col>

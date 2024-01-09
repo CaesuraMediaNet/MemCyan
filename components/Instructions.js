@@ -1,7 +1,7 @@
 // The comprehensive instructions which show example boards and a video.
 //
 import { useRef } from 'react';
-import styles from '../styles/memtyles.module.css';
+import styles from '../styles/cyandot.module.css';
 import CardTable from './CardTable';
 import Card from './Card';
 import MtRow from '../components/MtRow';
