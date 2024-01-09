@@ -66,7 +66,7 @@ import {
    faDragon,
    faScroll,
    faPuzzlePiece,
-   faCircleDot,
+   faCircle,
 } from '@fortawesome/free-solid-svg-icons'
 
 // Local Components.
@@ -164,7 +164,7 @@ export default function Game () {
          clearInterval (gameIntervalId);
          setGameStarted (false);
       } else {
-         setGameIntervalId (setInterval(chooseRandomTyle, 3000));
+         setGameIntervalId (setInterval(chooseRandomTyle, 1000));
          setGameStarted (true);
       }
    }
@@ -263,13 +263,29 @@ export default function Game () {
    // Flip the card, if possible and set some state.
    //
    function handleTyleClick (card) {
+      setNumClicks((nc) => nc + 1);
       if (card.flipped) {
          console.log ("Won card : ", card);
-         let thisBoard           = JSON.parse(JSON.stringify(boardRef.current));
-         thisBoard[card.id].icon = faCircleDot;
-         thisBoard[card.id].won  = true;
+         let thisBoard               = JSON.parse(JSON.stringify(boardRef.current));
+         thisBoard[card.id].icon     = faCircle;
+         thisBoard[card.id].won      = true;
+         thisBoard[card.id].colour   = 'cyan';
+         thisBoard[card.id].cardName = 'faCircle';
+
          boardRef.current = thisBoard;
          setBoard((b) => thisBoard);
+
+         // See if this click is the winning click.
+         //
+         let wonCount = 0;
+         thisBoard.forEach((card, index) => {
+            if (card.won) wonCount++;
+         });
+         if (wonCount === thisBoard.length) {
+            setWonPlay    (true);
+            setTimerAction ((timerAction) => "stop");
+            setWonAllPlay (true);
+         }
       } else {
          console.log ("Card is missed : " + card.flipped);
       }
