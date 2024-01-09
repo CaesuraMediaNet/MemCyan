@@ -19,7 +19,7 @@ export default function Card ({id, icon, width, height, clicked, flipped, won, c
     }
     let blankStyle         = {...iconStyle, color   : "dimgray"};
     let selectedStyle      = {...iconStyle};
-    let wonStyle           = {...iconStyle, opacity : 0.6};
+    let wonStyle           = {...iconStyle, opacity : 1.0};
 
     // Some icons are bigger than others moving the page about.
     //

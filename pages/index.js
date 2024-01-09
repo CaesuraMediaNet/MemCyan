@@ -100,7 +100,7 @@ export default function Game () {
    const [numCards, setNumCards]                   = useState (12);
    const [numClicks, setNumClicks]                 = useState (0);
    const [gameTime,setGameTime]                    = useState(0);
-   const [timerAction,setTimerAction]              = useState("start");
+   const [timerAction,setTimerAction]              = useState("stop");
    const [scores,setScores]                        = useState ([]);
    const [showPrivacyLink, setShowPrivacyLink]     = useState (false);
    const [gameStarted, setGameStarted]             = useState (false);
@@ -131,13 +131,9 @@ export default function Game () {
       setWonPlay(false);
       setWonAllPlay(false);
       setNumClicks(0);
-      let now                = Date.now();
-      let action             = "reset" + now; // Keep resetting on button click, but action is still "reset".
-      if (wonAllPlay) action = "restart";
-      setTimerAction ((timerAction) => action);
+      setTimerAction ((timerAction) => 'reset');
    }
    function chooseRandomTyle () {
-
       let thisBoard = JSON.parse(JSON.stringify(boardRef.current));
 
       // Get non-won tyles to choose a random index from.
@@ -163,9 +159,12 @@ export default function Game () {
       if (gameStarted) {
          clearInterval (gameIntervalId);
          setGameStarted (false);
+         setTimerAction ((timerAction) => 'stop');
       } else {
+         clearBoard ();
          setGameIntervalId (setInterval(chooseRandomTyle, 1000));
          setGameStarted (true);
+         setTimerAction ((timerAction) => 'restart');
       }
    }
    function ClearButton () {
@@ -265,7 +264,6 @@ export default function Game () {
    function handleTyleClick (card) {
       setNumClicks((nc) => nc + 1);
       if (card.flipped) {
-         console.log ("Won card : ", card);
          let thisBoard               = JSON.parse(JSON.stringify(boardRef.current));
          thisBoard[card.id].icon     = faCircle;
          thisBoard[card.id].won      = true;
@@ -285,18 +283,10 @@ export default function Game () {
             setWonPlay    (true);
             setTimerAction ((timerAction) => "stop");
             setWonAllPlay (true);
+            setGameStarted(false);
+            startStopGame();
          }
-      } else {
-         console.log ("Card is missed : " + card.flipped);
       }
-      /*
-      let { won, wonAll } = flipCard (card, numClicks, setNumClicks, board, setBoard);
-      if (won)    setWonPlay    (true);
-      if (wonAll) {
-         setWonAllPlay (true);
-         setTimerAction ((timerAction) => "stop");
-      }
-      */
    }
    function scrollToInstructions () {
       instructionsRef.current.scrollIntoView({ behavior: 'smooth' });
