@@ -134,9 +134,15 @@ export default function Game () {
       setTimerAction ((timerAction) => action);
    }
    function chooseRandomTyle () {
-      let cardNum = Math.floor(Math.random() * board.length);
-      let card = board[cardNum];
-      flipCard (card, numClicks, setNumClicks, board, setBoard) 
+      let cardNum   = Math.floor(Math.random() * board.length);
+      let thisBoard = JSON.parse(JSON.stringify(board));
+
+      // Clear all flipped cards/tyles and set the random one to be flipped.
+      //
+      thisBoard.forEach((thisCard, index) => {
+         if (index === cardNum || thisCard.won) thisBoard[index].flipped = true;
+      });
+      setBoard((b) => thisBoard);
    }
    function startStopGame () {
       if (gameStarted) {
@@ -243,15 +249,13 @@ export default function Game () {
    //
    function handleTyleClick (card) {
       if (card.flipped) {
-         console.log ("Card is won : " + card.flipped);
-         console.log ("Card is     : " + JSON.stringify(card));
-         console.log ("Board is    : ", board);
-         // AKJC HERE - set to Cyan Dot and call setBoard.
-         let thisBoard = JSON.parse(JSON.stringify(board));
+         console.log ("Won card : ", card);
+         let thisBoard           = JSON.parse(JSON.stringify(board));
          thisBoard[card.id].icon = faCircleDot;
-         setBoard(thisBoard);
-         // AKJC HERE : Something else is resetting it and how is only one magically being flipped at a time?
-         // AKJC HERE : flipCard could be re-written from scratch.
+         thisBoard[card.id].won  = true;
+         setBoard((b) => thisBoard);
+      } else {
+         console.log ("Card is missed : " + card.flipped);
       }
       /*
       let { won, wonAll } = flipCard (card, numClicks, setNumClicks, board, setBoard);
