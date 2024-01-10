@@ -95,6 +95,7 @@ import {addScore, getScores, clearScores} from '../functions/scores';
 export default function Game () {
 
    const [board, setBoard]                         = useState (initBoard);
+   const [copyBoard, setCopyBoard]                 = useState (initBoard);
    const [wonPlay, setWonPlay]                     = useState (false);
    const [wonAllPlay, setWonAllPlay]               = useState (false);
    const [numCards, setNumCards]                   = useState (12);
@@ -118,6 +119,7 @@ export default function Game () {
    useEffect(() => {
       let shuffledBoard = shuffleCards(initBoard.slice(), numCards);
       setBoard        (shuffledBoard);
+      setCopyBoard    (shuffledBoard);
       boardRef.current  = shuffledBoard;
       let currentScores = getScores();
       setScores ((scores) => currentScores);
@@ -126,7 +128,8 @@ export default function Game () {
 
    function clearBoard () {
       let shuffledCards = shuffleCards(initBoard.slice(), numCards);
-      setBoard(shuffledCards);
+      setBoard    (shuffledCards);
+      setCopyBoard(shuffledCards);
       boardRef.current  = shuffledCards;
       setWonPlay(false);
       setWonAllPlay(false);
@@ -162,7 +165,7 @@ export default function Game () {
          setTimerAction ((timerAction) => 'stop');
       } else {
          clearBoard ();
-         setGameIntervalId (setInterval(chooseRandomTyle, 1000));
+         setGameIntervalId (setInterval(chooseRandomTyle, 2000));
          setGameStarted (true);
          setTimerAction ((timerAction) => 'restart');
       }
@@ -262,19 +265,23 @@ export default function Game () {
    // Flip the card, if possible and set some state.
    //
    function handleTyleClick (card) {
+      console.log ("Clicked on card ", card.cardName);
       setNumClicks((nc) => nc + 1);
       let thisBoard               = JSON.parse(JSON.stringify(boardRef.current));
 
-      // Difficulty level two : if a tyle matches one already won, lose both.
-      //
+      // Difficulty level two : if a tyle matches one already won, lose both, but if clicked one
+      // matches a won one then set clicked one won.
+      // AKJC HERE : Urgh, the logic, the logic!
       let loseBoth = false;
       thisBoard.forEach((thisCard, index) => {
-
-         // AKJC HERE : thisCard.cardName for won ones is "faCircle" - so find another identifier ...
-         if (card.cardName === thisCard.cardName && thisCard.won) {
-            console.log ("Lose both");
-            thisBoard[index].won = false;
+         if (card.cardName === thisCard.cardName && thisCard.won && card.flipped) {
+            thisBoard[index].won      = false;
+            thisBoard[index].icon     = copyBoard[index].icon;
+            thisBoard[index].colour   = copyBoard[index].colour;
             loseBoth = true;
+            console.log ("Lose both.");
+         } else if (card.cardName === thisCard.cardName && thisCard.won) {
+            console.log ("Success in guessing match.");
          }
       });
       if (loseBoth) {
@@ -284,7 +291,6 @@ export default function Game () {
          thisBoard[card.id].icon     = faCircle;
          thisBoard[card.id].won      = true;
          thisBoard[card.id].colour   = 'cyan';
-         thisBoard[card.id].cardName = 'faCircle';
 
          boardRef.current = thisBoard;
          setBoard((b) => thisBoard);
@@ -351,7 +357,7 @@ export default function Game () {
                </div>
             </BsCard>
          </Container>
-         {scores.length > 0 && <ScoresTable />}
+         {scores.length > 10000000 && <ScoresTable />} {/* Change 10000000 to 0 when scores needed */}
          {wonAllPlay && <WonModal numClicks={numClicks} gameTime={gameTime} numTyles={numCards} />}
          <h5 className={styles.instructionsH} ref={instructionsRef}>Instructions</h5>
 

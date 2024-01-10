@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPuzzlePiece }   from '@fortawesome/free-solid-svg-icons'
 import styles              from '../styles/cyandot.module.css';
 
-export default function Card ({id, icon, width, height, clicked, flipped, won, colour, cardName}) {
+export default function Card ({id, icon, width, height, clicked, flipped, won, colour, cardName }) {
 
    // Next.js CSS Modules come in as classes, here we want CSS styles, not classNames.
    //
