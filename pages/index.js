@@ -271,22 +271,39 @@ export default function Game () {
 
       // Difficulty level two : if a tyle matches one already won, lose both, but if clicked one
       // matches a won one then set clicked one won.
-      // AKJC HERE : Urgh, the logic, the logic!
-      let loseBoth = false;
+      //
+      let loseBoth     = false;
+      let correctMatch = false;
       thisBoard.forEach((thisCard, index) => {
-         if (card.cardName === thisCard.cardName && thisCard.won && card.flipped) {
-            thisBoard[index].won      = false;
-            thisBoard[index].icon     = copyBoard[index].icon;
-            thisBoard[index].colour   = copyBoard[index].colour;
-            loseBoth = true;
-            console.log ("Lose both.");
-         } else if (card.cardName === thisCard.cardName && thisCard.won) {
-            console.log ("Success in guessing match.");
+
+         // Card names match but is not the same card.
+         //
+         if (card.cardName === thisCard.cardName && card.id !== thisCard.id) {
+
+            // If clicked card matches a won card, then lose both.
+            //
+            if (thisCard.won) {
+               thisBoard[index].icon     = copyBoard[index].icon;
+               thisBoard[index].won      = false;
+               thisBoard[index].colour   = copyBoard[index].colour;
+               loseBoth = true;
+               console.log ("Lose both");
+
+            // If the clicked card (card) is won then win the matching card.
+            //
+            } else if (card.won) {
+               thisBoard[thisCard.id].icon     = faCircle;
+               thisBoard[thisCard.id].won      = true;
+               thisBoard[thisCard.id].colour   = 'cyan';
+               correctMatch = true;
+               console.log ("Success in guessing match.");
+            }
          }
       });
-      if (loseBoth) {
+      if (loseBoth || correctMatch) {
          boardRef.current = thisBoard;
          setBoard((b) => thisBoard);
+         if (correctMatch) console.log ("correctMatch board : ", thisBoard);
       } else if (card.flipped) {
          thisBoard[card.id].icon     = faCircle;
          thisBoard[card.id].won      = true;
@@ -294,20 +311,21 @@ export default function Game () {
 
          boardRef.current = thisBoard;
          setBoard((b) => thisBoard);
+      }
 
-         // See if this click is the winning click.
-         //
-         let wonCount = 0;
-         thisBoard.forEach((card, index) => {
-            if (card.won) wonCount++;
-         });
-         if (wonCount === thisBoard.length) {
-            setWonPlay    (true);
-            setTimerAction ((timerAction) => "stop");
-            setWonAllPlay (true);
-            setGameStarted(false);
-            startStopGame();
-         }
+      // See if this click is the winning click.
+      //
+      let wonCount = 0;
+      thisBoard.forEach((thisCard, index) => {
+         console.log ("wonCount : ", wonCount);
+         if (thisCard.won) wonCount++;
+      });
+      if (wonCount === thisBoard.length) {
+         setWonPlay    (true);
+         setTimerAction ((timerAction) => "stop");
+         setWonAllPlay (true);
+         setGameStarted(false);
+         startStopGame();
       }
    }
    function scrollToInstructions () {
