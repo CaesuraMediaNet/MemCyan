@@ -25,7 +25,7 @@ export default function Card ({id, icon, width, height, clicked, flipped, won, c
     //
     let reduceSelectedBigIconStyle = {...selectedStyle, width : "75%"};
     let reduceWonBigIconStyle      = {...wonStyle,      width : "75%"};
-    if (cardName.match (/Moon|Brush|Lemon|Bell|HourglassStart/i)) {
+    if (!won && cardName.match (/Moon|Brush|Lemon|Bell|HourglassStart/i)) {
         selectedStyle = reduceSelectedBigIconStyle;
         wonStyle      = reduceWonBigIconStyle;
     }
