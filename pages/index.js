@@ -166,6 +166,18 @@ export default function Game () {
       boardRef.current = thisBoard;
       setBoard((b) => thisBoard);
    }
+   function stopGame () {
+      clearInterval (gameIntervalId);
+      setTimerAction ((timerAction) => 'stop');
+      setGameStarted (false);
+   }
+   function restartGame () {
+      unFlipAll ();
+      setTimerAction ((timerAction) => 'start');
+      let id = setInterval(chooseRandomTyle, 1000);
+      setGameIntervalId (id);
+      setGameStarted (true);
+   }
    function startStopGame () {
       if (gameStarted) {
          clearInterval (gameIntervalId);
@@ -307,6 +319,10 @@ export default function Game () {
             }
          }
       });
+      if (loseBoth) {
+         stopGame();
+         setTimeout(restartGame, 2000);
+      }
       if (loseBoth || correctMatch) {
          boardRef.current = thisBoard;
          setBoard((b) => thisBoard);
