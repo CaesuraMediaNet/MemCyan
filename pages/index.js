@@ -100,12 +100,14 @@ export default function Game () {
    const [wonAllPlay, setWonAllPlay]               = useState (false);
    const [numCards, setNumCards]                   = useState (12);
    const [numClicks, setNumClicks]                 = useState (0);
-   const [gameTime,setGameTime]                    = useState(0);
-   const [timerAction,setTimerAction]              = useState("stop");
+   const [gameTime,setGameTime]                    = useState (0);
+   const [timerAction,setTimerAction]              = useState ("stop");
    const [scores,setScores]                        = useState ([]);
    const [showPrivacyLink, setShowPrivacyLink]     = useState (false);
    const [gameStarted, setGameStarted]             = useState (false);
    const [gameIntervalId, setGameIntervalId]       = useState (0);
+   const [lostBoth, setLostBoth]                   = useState (false)
+   const [highlight,setHighlight]                  = useState([]);
 
    const numCardsRef                               = useRef();
    const instructionsRef                           = useRef();
@@ -166,12 +168,13 @@ export default function Game () {
       boardRef.current = thisBoard;
       setBoard((b) => thisBoard);
    }
-   function stopGame () {
+   function pauseGame () {
       clearInterval (gameIntervalId);
       setTimerAction ((timerAction) => 'stop');
       setGameStarted (false);
    }
    function restartGame () {
+      setLostBoth (false);
       unFlipAll ();
       setTimerAction ((timerAction) => 'start');
       let id = setInterval(chooseRandomTyle, 1000);
@@ -286,6 +289,8 @@ export default function Game () {
    // Flip the card, if possible and set some state.
    //
    function handleTyleClick (card) {
+
+      // AKJC HERE : if click on a Cyan Dot not matching then wierd things happen.
       if (!gameStarted) return;
       setNumClicks((nc) => nc + 1);
       let thisBoard               = JSON.parse(JSON.stringify(boardRef.current));
@@ -295,6 +300,7 @@ export default function Game () {
       //
       let loseBoth     = false;
       let correctMatch = false;
+      let highlight    = [];
       thisBoard.forEach((thisCard, index) => {
 
          // Card names match but is not the same card and both cards flipped
@@ -307,7 +313,8 @@ export default function Game () {
                thisBoard[index].icon     = copyBoard[index].icon;
                thisBoard[index].won      = false;
                thisBoard[index].colour   = copyBoard[index].colour;
-               loseBoth = true;
+               loseBoth                  = true;
+               highlight                 =  [index, card.id];
 
             // If the clicked card (card) is won then win the matching card.
             //
@@ -319,9 +326,21 @@ export default function Game () {
             }
          }
       });
+
+      // On losing both, the play might want to know why, so pause the game
+      // and explain.
+      //
       if (loseBoth) {
-         stopGame();
-         setTimeout(restartGame, 2000);
+         pauseGame();
+         thisBoard[highlight[0]].colour = 'red';
+         thisBoard[highlight[1]].colour = 'red';
+         setTimeout(function () {
+            thisBoard[highlight[0]].colour = copyBoard[highlight[0]].colour;
+            thisBoard[highlight[1]].colour = copyBoard[highlight[1]].colour;
+            restartGame();
+         }, 2000);
+
+         setLostBoth(true);
       }
       if (loseBoth || correctMatch) {
          boardRef.current = thisBoard;
@@ -357,6 +376,7 @@ export default function Game () {
          <Container fluid> {/* Bootstrap */}
             <BsCard className={styles.BsCardStyle}> {/* Bootstrap and CML */}
                <h1>Cyan Dot</h1>
+               {/*
                <h1
                   className={styles.navIconRight}
                   onClick={() => scrollToInstructions()}
@@ -364,6 +384,7 @@ export default function Game () {
                >
                   ?
                </h1>
+               */}
                <Row>
                   <Col md={6}>
                      <StartStopButton />
@@ -392,17 +413,18 @@ export default function Game () {
                         <GameClock gameTime={timeGameTook} action={timerAction}  />
                      </Col>
                   </Row>
+                  {lostBoth && <p>Already won! Next time click on a Cyan Dot that matches, from memory!</p>}
                   {gameStarted || <SelectNumCards />}
                </div>
             </BsCard>
          </Container>
          {scores.length > 10000000 && <ScoresTable />} {/* Change 10000000 to 0 when scores needed */}
          {wonAllPlay && <WonModal numClicks={numClicks} gameTime={gameTime} numTyles={numCards} />}
+         {/*
          <h5 className={styles.instructionsH} ref={instructionsRef}>Instructions</h5>
-
-
          <Instructions />
-         {/*showPrivacyLink && <PrivacyPolicy setShowPrivacyLink={setShowPrivacyLink} />*/}
+         */}
+
          <Container fluid> {/* Bootstrap */}
             <footer className={styles.footer}>
                <Row>
