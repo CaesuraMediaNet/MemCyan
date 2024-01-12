@@ -301,11 +301,28 @@ export default function Game () {
       let loseBoth     = false;
       let correctMatch = false;
       let highlight    = [];
+
+      // First find the cardName for the one we are trying to match.
+      // It will be the only one flipped and not won.
+      //
+      let thisCardName = "Not found";
+      thisBoard.forEach((thisCard, index) => {
+         if (thisCard.flipped && ! thisCard.won) thisCardName = thisCard.cardName;
+      });
+      console.log ("thisCardName : ", thisCardName);
+
       thisBoard.forEach((thisCard, index) => {
 
-         // Card names match but is not the same card and both cards flipped
+         // Card names match but is not the same card and both cards flipped - one by timer (thisCard), one by
+         // clicking on it (card).
          //
-         if (card.cardName === thisCard.cardName && card.id !== thisCard.id && card.flipped && thisCard.flipped) {
+         if (
+            card.cardName   === thisCard.cardName
+            && thisCardName === card.cardName
+            && card.id      !== thisCard.id
+            && card.flipped
+            && thisCard.flipped
+         ) {
 
             // If clicked card matches a won card, then lose both.
             //
