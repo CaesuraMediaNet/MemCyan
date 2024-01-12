@@ -3,8 +3,8 @@ import Image from 'next/image';
 import styles from '../styles/cyandot.module.css';
 import Link from 'next/link';
 import Script from 'next/script';
-import { Averia_Sans_Libre } from 'next/font/google';
-const cyanDotFont = Averia_Sans_Libre({
+import { Lemon } from 'next/font/google';
+const cyanDotFont = Lemon({
   weight: '400',
   subsets: ['latin'],
   display: 'swap',

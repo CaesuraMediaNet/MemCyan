@@ -36,36 +36,6 @@ import BsCard from 'react-bootstrap/Card';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
    faUserSecret,
-   faQuestion,
-   faEnvelope,
-   faRocket,
-   faHippo,
-   faUmbrella,
-   faGift,
-   faLemon,
-   faBrush,
-   faMagicWandSparkles,
-   faBell,
-   faBarcode,
-   faKey,
-   faPaintRoller,
-   faBicycle,
-   faFeather,
-   faBinoculars,
-   faShirt,
-   faCarSide,
-   faMountainSun,
-   faHourglassStart,
-   faStore,
-   faMoon,
-   faHotel,
-   faWrench,
-   faTrophy,
-   faMotorcycle,
-   faRadio,
-   faDragon,
-   faScroll,
-   faPuzzlePiece,
    faCircle,
 } from '@fortawesome/free-solid-svg-icons'
 
@@ -309,7 +279,6 @@ export default function Game () {
       thisBoard.forEach((thisCard, index) => {
          if (thisCard.flipped && ! thisCard.won) thisCardName = thisCard.cardName;
       });
-      console.log ("thisCardName : ", thisCardName);
 
       thisBoard.forEach((thisCard, index) => {
 
