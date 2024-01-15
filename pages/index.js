@@ -77,7 +77,8 @@ export default function Game () {
    const [gameStarted, setGameStarted]             = useState (false);
    const [gameIntervalId, setGameIntervalId]       = useState (0);
    const [lostBoth, setLostBoth]                   = useState (false)
-   const [highlight,setHighlight]                  = useState([]);
+   const [highlight,setHighlight]                  = useState ([]);
+   const [showGooglePlay,setShowGooglePlay]        = useState (false);
 
    const numCardsRef                               = useRef();
    const instructionsRef                           = useRef();
@@ -419,7 +420,7 @@ export default function Game () {
                   </Col>
                   <Col>
                      <div className={styles.googlePlayIcon}>
-                        <a target="_blank" href='https://play.google.com/store/apps/details?id=com.cyandot&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/></a>
+                        {showGooglePlay && <a target="_blank" href='https://play.google.com/store/apps/details?id=com.cyandot&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/></a>}
                      </div>
                   </Col>
                   <Col>
