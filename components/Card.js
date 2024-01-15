@@ -19,20 +19,32 @@ export default function Card ({id, icon, width, height, clicked, flipped, won, c
     }
     let blankStyle         = {...iconStyle, color   : "dimgray", opacity : 0.5};
     let selectedStyle      = {...iconStyle};
-    let wonStyle           = {...iconStyle, opacity : 0.6};
+
+    // Div with CSS shadows.
+    //
+    let wonStyle           = {
+       ...iconStyle,
+       opacity         : 0.6,
+       backgroundColor : "#00ffff",
+       borderRadius    : "50%",
+       boxShadow       : "inset rgb(0, 147, 147) 3px -5px 20px 4px",
+       height          : "90%",
+       width           : "90%",
+    };
 
     // Some icons are bigger than others moving the page about.
     //
     let reduceSelectedBigIconStyle = {...selectedStyle, width : "75%"};
     let reduceWonBigIconStyle      = {...wonStyle,      width : "75%"};
-    if (!won && cardName.match (/cake|chair|snowflake|bong|bagshopping|bucket/i)) {
+    if (!won && cardName.match (/graduation|cake|chair|snowflake|bong|bagshopping|bucket/i)) {
         selectedStyle = reduceSelectedBigIconStyle;
         wonStyle      = reduceWonBigIconStyle;
     }
+    // <img className={styles.imgFluid} src="/img/cyandot.png" />
     return (
         <div className={flipped ? styles.cardStyleFlipped : styles.cardStyle} onClick={clicked} >
             {won ?
-                <FontAwesomeIcon style={wonStyle}      icon={icon} />
+                <div style={wonStyle}></div>
                 : flipped ?
                 <FontAwesomeIcon style={selectedStyle} icon={icon} />
                 :
