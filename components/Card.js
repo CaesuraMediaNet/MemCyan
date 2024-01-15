@@ -32,17 +32,26 @@ export default function Card ({id, icon, width, height, clicked, flipped, won, c
        width           : "90%",
     };
 
+    // Move them all over the board.
+    //
+    let randTop  = Math.floor(Math.random() * 10);
+    let randLeft = Math.floor(Math.random() * 10);
+    let thisCardStyle = {
+       position : "relative",
+       width    : "100%",
+       height   : "100%",
+       top      : randTop  + "px",
+       left     : randLeft + "px",
+    };
+
     // Some icons are bigger than others moving the page about.
     //
     let reduceSelectedBigIconStyle = {...selectedStyle, width : "75%"};
-    let reduceWonBigIconStyle      = {...wonStyle,      width : "75%"};
     if (!won && cardName.match (/graduation|cake|chair|snowflake|bong|bagshopping|bucket/i)) {
         selectedStyle = reduceSelectedBigIconStyle;
-        wonStyle      = reduceWonBigIconStyle;
     }
-    // <img className={styles.imgFluid} src="/img/cyandot.png" />
     return (
-        <div className={flipped ? styles.cardStyleFlipped : styles.cardStyle} onClick={clicked} >
+        <div style={thisCardStyle}  onClick={clicked} >
             {won ?
                 <div style={wonStyle}></div>
                 : flipped ?
