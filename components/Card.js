@@ -4,7 +4,7 @@ import { useState }          from 'react';
 import { useEffect }         from 'react';
 import { useRef }            from 'react';
 import { FontAwesomeIcon }   from '@fortawesome/react-fontawesome'
-import { faImage }           from '@fortawesome/free-solid-svg-icons'
+import { faImage, faSpaghettiMonsterFlying }           from '@fortawesome/free-solid-svg-icons'
 import styles                from '../styles/memcyan.module.css';
 
 export default function Card ({id, icon, width, height, clicked, flipped, won, colour, cardName }) {
@@ -20,22 +20,13 @@ export default function Card ({id, icon, width, height, clicked, flipped, won, c
     let blankStyle         = {...iconStyle, color   : "dimgray", opacity : 0.5};
     let selectedStyle      = {...iconStyle};
 
-    // Div with CSS shadows.
-    //
-    let wonStyle           = {
-       ...iconStyle,
-       opacity         : 0.6,
-       backgroundColor : "#00ffff",
-       borderRadius    : "50%",
-       boxShadow       : "inset rgb(0, 147, 147) 3px -5px 20px 4px",
-       height          : "90%",
-       width           : "90%",
-    };
-
-    // Move them all over the board.
+    // Move them all over the board. But not in this component.
     //
     let randTop  = Math.floor(Math.random() * 10);
     let randLeft = Math.floor(Math.random() * 10);
+    randTop = 0;
+    randLeft = 0;
+
     let thisCardStyle = {
        position : "relative",
        width    : "100%",
@@ -53,7 +44,7 @@ export default function Card ({id, icon, width, height, clicked, flipped, won, c
     return (
         <div style={thisCardStyle}  onClick={clicked} >
             {won ?
-                <div style={wonStyle}></div>
+                <img src="/img/memcyan-logo.png" alt="You won this one!" className={styles.imgFluid} />
                 : flipped ?
                 <FontAwesomeIcon style={selectedStyle} icon={icon} />
                 :
