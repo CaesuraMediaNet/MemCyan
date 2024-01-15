@@ -8,7 +8,7 @@
 // 7. If not, both go back to blank image, your Cyan Dot is removed.
 //
 // React.js and Next.js
-// cyandotgame.com (TBD) - need a name without dot in it : MemCyan.com
+// MemCyan.com
 //
 // Copyright (c) 2024 Caesura Media Limited
 
