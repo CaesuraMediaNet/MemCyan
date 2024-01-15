@@ -5,10 +5,10 @@
 // 4. Another icon appears, ditto.
 // 5. If that icon has already been shown, click on that Cyan Dot by memory
 // 6. If correct, another Cyan Dot
-// 7. If not, both go back to jigsaw, your Cyan Dot is removed.
+// 7. If not, both go back to blank image, your Cyan Dot is removed.
 //
 // React.js and Next.js
-// cyandotgame.com (TBD)
+// cyandotgame.com (TBD) - need a name without dot in it : MemCyan.com
 //
 // Copyright (c) 2024 Caesura Media Limited
 
