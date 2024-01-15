@@ -4,8 +4,8 @@ import { useState }          from 'react';
 import { useEffect }         from 'react';
 import { useRef }            from 'react';
 import { FontAwesomeIcon }   from '@fortawesome/react-fontawesome'
-import { faImage }          from '@fortawesome/free-solid-svg-icons'
-import styles                from '../styles/cyandot.module.css';
+import { faImage }           from '@fortawesome/free-solid-svg-icons'
+import styles                from '../styles/memcyan.module.css';
 
 export default function Card ({id, icon, width, height, clicked, flipped, won, colour, cardName }) {
 
@@ -62,4 +62,3 @@ export default function Card ({id, icon, width, height, clicked, flipped, won, c
         </div>
     );
 }
-

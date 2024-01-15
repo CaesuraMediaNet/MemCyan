@@ -1,11 +1,11 @@
-// Cyan Dot Game : 
+// MemCyan Game : 
 // 1. Press Start game button
 // 2. An icon appears briefly
-// 3. Click on the icon within the time, icon goes to a Cyan Dot.
+// 3. Click on the icon within the time, icon goes to a Cyan circle.
 // 4. Another icon appears, ditto.
-// 5. If that icon has already been shown, click on that Cyan Dot by memory
-// 6. If correct, another Cyan Dot
-// 7. If not, both go back to blank image, your Cyan Dot is removed.
+// 5. If that icon has already been shown, click on that Cyan circle by memory
+// 6. If correct, another Cyan circle
+// 7. If not, both go back to blank image, your Cyan circle is removed.
 //
 // React.js and Next.js
 // MemCyan.com
@@ -16,7 +16,7 @@
 //
 import Head from 'next/head';
 import Image from 'next/image';
-import styles from '../styles/cyandot.module.css';
+import styles from '../styles/memcyan.module.css';
 import Layout, { siteTitle } from '../components/layout';
 
 // React.js
@@ -261,7 +261,7 @@ export default function Game () {
    //
    function handleTyleClick (card) {
 
-      // AKJC HERE : if click on a Cyan Dot not matching then wierd things happen.
+      // AKJC HERE : if click on a Cyan Circle not matching then wierd things happen.
       if (!gameStarted) return;
       setNumClicks((nc) => nc + 1);
       let thisBoard               = JSON.parse(JSON.stringify(boardRef.current));
@@ -362,7 +362,7 @@ export default function Game () {
       <Layout> {/* A Next.js idea */}
          <Container fluid> {/* Bootstrap */}
             <BsCard className={styles.BsCardStyle}> {/* Bootstrap and CML */}
-               <h1>Cyan Dot</h1>
+               <h1>MemCyan</h1>
                {/*
                <h1
                   className={styles.navIconRight}
@@ -400,7 +400,7 @@ export default function Game () {
                         <GameClock gameTime={timeGameTook} action={timerAction}  />
                      </Col>
                   </Row>
-                  {lostBoth && <p>Already won! Next time click on a Cyan Dot that matches, from memory!</p>}
+                  {lostBoth && <p>Already won! Next time click on a Cyan circle that matches, from memory!</p>}
                   {gameStarted || <SelectNumCards />}
                </div>
             </BsCard>
@@ -420,7 +420,7 @@ export default function Game () {
                   </Col>
                   <Col>
                      <div className={styles.googlePlayIcon}>
-                        {showGooglePlay && <a target="_blank" href='https://play.google.com/store/apps/details?id=com.cyandot&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/></a>}
+                        {showGooglePlay && <a target="_blank" href='https://play.google.com/store/apps/details?id=com.memcyan&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/></a>}
                      </div>
                   </Col>
                   <Col>

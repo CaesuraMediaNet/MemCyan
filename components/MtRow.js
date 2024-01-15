@@ -3,7 +3,7 @@
 import { useState }  from 'react';
 import { useEffect } from 'react';
 import { useRef }    from 'react';
-import styles        from '../styles/cyandot.module.css';
+import styles        from '../styles/memcyan.module.css';
 
 export default function MtRow ({children}) {
    return (

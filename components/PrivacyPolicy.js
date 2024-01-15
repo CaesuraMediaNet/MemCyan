@@ -1,4 +1,4 @@
-import styles from '../styles/cyandot.module.css';
+import styles from '../styles/memcyan.module.css';
 
 export default function PrivacyPolicy ({setShowPrivacyLink}) {
    return (
