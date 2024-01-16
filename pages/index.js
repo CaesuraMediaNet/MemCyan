@@ -77,6 +77,7 @@ export default function Game () {
    const [gameStarted, setGameStarted]             = useState (false);
    const [gameIntervalId, setGameIntervalId]       = useState (0);
    const [lostBoth, setLostBoth]                   = useState (false)
+   const [correctMatch, setCorrectMatch]           = useState (false)
    const [highlight,setHighlight]                  = useState ([]);
    const [showGooglePlay,setShowGooglePlay]        = useState (false);
 
@@ -145,7 +146,8 @@ export default function Game () {
       setGameStarted (false);
    }
    function restartGame () {
-      setLostBoth (false);
+      setLostBoth     (false);
+      setCorrectMatch (false);
       unFlipAll ();
       setTimerAction ((timerAction) => 'start');
       let id = setInterval(chooseRandomTyle, 1000);
@@ -260,18 +262,17 @@ export default function Game () {
    // Flip the card, if possible and set some state.
    //
    function handleTyleClick (card) {
-
-      // AKJC HERE : if click on a Cyan Circle not matching then wierd things happen.
       if (!gameStarted) return;
+
       setNumClicks((nc) => nc + 1);
       let thisBoard               = JSON.parse(JSON.stringify(boardRef.current));
 
       // Difficulty level two : if a tyle matches one already won, lose both, but if clicked one
       // matches a won one then set clicked one won.
       //
-      let loseBoth     = false;
-      let correctMatch = false;
-      let highlight    = [];
+      let loseBoth  = false;
+      let winBoth   = false;
+      let highlight = [];
 
       // First find the cardName for the one we are trying to match.
       // It will be the only one flipped and not won.
@@ -294,42 +295,61 @@ export default function Game () {
             && thisCard.flipped
          ) {
 
+            // Highlight red for lose both, green for win both.
+            //
+            highlight                    =  [index, card.id];
+
             // If clicked card matches a won card, then lose both.
             //
             if (thisCard.won) {
-               thisBoard[index].icon     = copyBoard[index].icon;
-               thisBoard[index].won      = false;
-               thisBoard[index].colour   = copyBoard[index].colour;
-               loseBoth                  = true;
-               highlight                 =  [index, card.id];
+               loseBoth = true;
 
             // If the clicked card (card) is won then win the matching card.
             //
             } else if (card.won) {
-               thisBoard[thisCard.id].icon     = faCircle;
-               thisBoard[thisCard.id].won      = true;
-               thisBoard[thisCard.id].colour   = 'cyan';
-               correctMatch = true;
+               winBoth  = true;
             }
          }
       });
 
-      // On losing both, the play might want to know why, so pause the game
-      // and explain.
+      // On winning or losing show both icons in red or green for a couple of seconds
+      // then set the icons to basic image or cyan circle.
       //
-      if (loseBoth) {
+      if (loseBoth || winBoth) {
          pauseGame();
-         thisBoard[highlight[0]].colour = 'red';
-         thisBoard[highlight[1]].colour = 'red';
+         // First show originla icons in rd or green.
+         //
+         thisBoard[highlight[0]].colour = loseBoth ? 'red' : 'green';
+         thisBoard[highlight[0]].icon   = copyBoard[highlight[0]].icon;
+         thisBoard[highlight[0]].won    = false;
+         thisBoard[highlight[1]].colour = loseBoth ? 'red' : 'green';
+         thisBoard[highlight[1]].icon   = copyBoard[highlight[1]].icon;
+         thisBoard[highlight[1]].won    = false;
+
+         // Then sometime later show icons that match win or lose. And restart the game.
+         //
          setTimeout(function () {
-            thisBoard[highlight[0]].colour = copyBoard[highlight[0]].colour;
-            thisBoard[highlight[1]].colour = copyBoard[highlight[1]].colour;
+            if (winBoth) {
+               thisBoard[highlight[0]].colour = 'cyan';
+               thisBoard[highlight[0]].icon   = faCircle;
+               thisBoard[highlight[0]].won    = true;
+               thisBoard[highlight[1]].colour = 'cyan';
+               thisBoard[highlight[1]].icon   = faCircle;
+               thisBoard[highlight[1]].won    = true;
+            } else {
+               thisBoard[highlight[0]].colour = copyBoard[highlight[0]].colour;
+               thisBoard[highlight[0]].icon   = copyBoard[highlight[0]].icon;
+               thisBoard[highlight[0]].won    = false;
+               thisBoard[highlight[1]].colour = copyBoard[highlight[1]].colour;
+               thisBoard[highlight[1]].icon   = copyBoard[highlight[0]].icon;
+               thisBoard[highlight[1]].won    = false;
+            }
+            boardRef.current = thisBoard;
+            setBoard((b) => thisBoard);
             restartGame();
          }, 2000);
-
-         setLostBoth(true);
-      }
-      if (loseBoth || correctMatch) {
+         if (loseBoth) setLostBoth     (true);
+         if (winBoth)  setCorrectMatch (true);
          boardRef.current = thisBoard;
          setBoard((b) => thisBoard);
       } else if (card.flipped) {
@@ -401,6 +421,7 @@ export default function Game () {
                      </Col>
                   </Row>
                   {lostBoth && <p>Already won! Next time click on a Cyan circle that matches, from memory!</p>}
+                  {correctMatch && <p>Correct match!</p>}
                   {gameStarted || <SelectNumCards />}
                </div>
             </BsCard>

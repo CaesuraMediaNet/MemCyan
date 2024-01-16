@@ -1,0 +1,9 @@
+<svg ...
+￼    color: dimgray;
+￼    padding: 5px;
+￼    height: 75%;
+￼    width: 75%;
+￼    opacity: 0.5;
+￼    position: absolute;
+￼    top: 25%;
+￼    left: 25%;
