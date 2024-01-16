@@ -473,7 +473,6 @@ export default function Game () {
          <h5 className={styles.instructionsH} ref={instructionsRef}>Instructions</h5>
          <Instructions />
          */}
-
          <Container fluid> {/* Bootstrap */}
             <footer className={styles.footer}>
                <Row>

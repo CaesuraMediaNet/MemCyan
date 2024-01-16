@@ -20,7 +20,7 @@ function handleTyleClick () {
 }
 
 
-import {startBoard, wonBoard, twoMatching, twoMisMatching, oneSelected, twoMatchedNext} from '../components/boards';
+import {startBoard, wonBoard, twoMatching, twoLost, twoWon} from '../components/boards';
 
 export default function Instructions () {
    return (
@@ -39,7 +39,7 @@ export default function Instructions () {
                   />
                </MtRow>
                <p className={styles.instructionP}>
-                  At the start of the game the board has all Tyles turned over, showing the jigsaw image :
+                  At the start of the game the board has all Tyles turned over, showing the blank image :
                </p>
                <MtRow>
                   <CardTable
@@ -51,12 +51,15 @@ export default function Instructions () {
                </MtRow>
 
                <p className={styles.instructionP}>
-                  The game is to turn over pairs of Tyles, by clicking on the
-                  Jigsaw pictures, to find the matching ones, like this :
+                  The game starts when pressing the Start Game button and the game will show one random Tyle
+                  at a time.  You have to click on the Tyle in time, and the Tyle goes to a blue circle.
+                  The game is to fill the screen with blue circles.
+                  The only thing is - you have to click on a matching image if one is already shown.
+                  If you click on one shown that already has a partner blue circled, then you lose them  both:
                </p>
                <MtRow>
                   <CardTable
-                     board={twoMatching}
+                     board={twoLost}
                      Card={Card}
                      handleTyleClick={handleTyleClick}
                      numCards={12}
@@ -64,53 +67,12 @@ export default function Instructions () {
                </MtRow>
 
                <p className={styles.instructionP}>
-                  Only two Tyles can be turned over at any one time, clicking on any more will
-                  not do anything.
-               </p>
-
-               <p className={styles.instructionP}>
-                  If your two Tyles do not match ...
+                  However, if you remember where its maching Tyle is and click on  that then 
+                  you win both, and they turn to blue circles, safe.
                </p>
                <MtRow>
                   <CardTable
-                     board={twoMisMatching}
-                     Card={Card}
-                     handleTyleClick={handleTyleClick}
-                     numCards={12}
-                  />
-               </MtRow>
-
-               <p className={styles.instructionP}>
-                  ...you can turn either one (or both) back over by clicking on it (them) again  (just
-                  the envelope here) :
-               </p>
-               <MtRow>
-                  <CardTable
-                     board={oneSelected}
-                     Card={Card}
-                     handleTyleClick={handleTyleClick}
-                     numCards={12}
-                  />
-               </MtRow>
-
-               <p className={styles.instructionP}>
-                  If your two Tyles match, then they become a bit opaque and you can select then two more Tyles : 
-               </p>
-               <MtRow>
-                  <CardTable
-                     board={twoMatchedNext}
-                     Card={Card}
-                     handleTyleClick={handleTyleClick}
-                     numCards={12}
-                  />
-               </MtRow>
-
-               <p className={styles.instructionP}>
-                  When all Tyles are matched, you have won the game!
-               </p>
-               <MtRow>
-                  <CardTable
-                     board={wonBoard}
+                     board={twoWon}
                      Card={Card}
                      handleTyleClick={handleTyleClick}
                      numCards={12}
@@ -124,7 +86,7 @@ export default function Instructions () {
                </p>
 
                <p className={styles.instructionP}>
-                  You can restart the game using the Clear Board button at the top :
+                  You can clear the board in the middle of the game using the Clear Board button at the top :
                </p>
                <img className={styles.imgFluid} src="/img/clearBoardButton.png" />
 
@@ -135,10 +97,12 @@ export default function Instructions () {
                <p className={styles.instructionP}>
                   Good luck!
                </p>
+               {/*
                <p className={styles.instructionP}>
                   Here is a video showing a game being played.
                </p>
                <ShakaPlayer src="/video/DemoVideo.mpd" />
+               */}
             </div>
          </BsCard>
       </Container>
