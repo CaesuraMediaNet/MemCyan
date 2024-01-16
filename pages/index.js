@@ -66,15 +66,17 @@ export default function Game () {
 
    const [board, setBoard]                         = useState (initBoard);
    const [copyBoard, setCopyBoard]                 = useState (initBoard);
-   const [wonPlay, setWonPlay]                     = useState (false);
    const [wonAllPlay, setWonAllPlay]               = useState (false);
    const [numCards, setNumCards]                   = useState (12);
    const [numClicks, setNumClicks]                 = useState (0);
    const [gameTime,setGameTime]                    = useState (0);
-   const [timerAction,setTimerAction]              = useState ("stop");
+   const [numWon, setNumWon]                       = useState (0);
+   const [numLost, setNumLost]                     = useState (0);
+   const [timerAction,setTimerAction]              = useState ("");
    const [scores,setScores]                        = useState ([]);
    const [showPrivacyLink, setShowPrivacyLink]     = useState (false);
    const [gameStarted, setGameStarted]             = useState (false);
+   const [gamePaused, setGamePaused]               = useState (false);
    const [gameIntervalId, setGameIntervalId]       = useState (0);
    const [lostBoth, setLostBoth]                   = useState (false)
    const [correctMatch, setCorrectMatch]           = useState (false)
@@ -105,7 +107,6 @@ export default function Game () {
       setBoard    (shuffledCards);
       setCopyBoard(shuffledCards);
       boardRef.current  = shuffledCards;
-      setWonPlay(false);
       setWonAllPlay(false);
       setNumClicks(0);
       setTimerAction ((timerAction) => 'reset');
@@ -142,8 +143,8 @@ export default function Game () {
    }
    function pauseGame () {
       clearInterval (gameIntervalId);
-      setTimerAction ((timerAction) => 'stop');
-      setGameStarted (false);
+      setTimerAction ((timerAction) => 'pause');
+      setGamePaused (true);
    }
    function restartGame () {
       setLostBoth     (false);
@@ -152,9 +153,10 @@ export default function Game () {
       setTimerAction ((timerAction) => 'start');
       let id = setInterval(chooseRandomTyle, 1000);
       setGameIntervalId (id);
-      setGameStarted (true);
+      setGamePaused  (false);
    }
    function startStopGame () {
+      if (gamePaused) return;
       if (gameStarted) {
          clearInterval (gameIntervalId);
          setGameStarted (false);
@@ -183,7 +185,7 @@ export default function Game () {
             className={styles.button}
             onClick={startStopGame}
          >
-            {gameStarted ? 'Stop Game' : 'Start Game'}
+            {gameStarted || gamePaused ? 'Stop Game' : 'Start Game'}
          </button>
       );
    }
@@ -216,14 +218,22 @@ export default function Game () {
       clearScores ();
       setScores (scores => []);
    }
+   function calcOverallScore (numWon, numLost, numClicks, gameTime, numCards) {
+      return (25 * numCards) - numLost - numClicks - gameTime;
+   }
    // When a game is won this is called.
    //
    function timeGameTook ({timeS}) {
+      if (!wonAllPlay) return;
       setGameTime ((gameTime) => timeS);
       let thisGame = {
-         numCards  : numCards,
-         numClicks : numClicks,
-         gameTime  : timeS,
+         date         : new Date().toLocaleString(),
+         overallScore : calcOverallScore (numWon, numLost, numClicks, timeS, numCards),
+         numWon       : numWon,
+         numLost      : numLost,
+         numCards     : numCards,
+         numClicks    : numClicks,
+         gameTime     : timeS,
       }
       let allScores = addScore (thisGame);
       setScores (allScores);
@@ -246,7 +256,13 @@ export default function Game () {
                <h5>Past Scores</h5>
                {scores.map ((score, index) => 
                   <li key={index}>
-                     Cards : {score.numCards} Clicks : {score.numClicks} Time : {score.gameTime}
+                     Date : {score.date};&nbsp;
+                     SCORE : {score.overallScore};&nbsp;
+                     Won : {score.numWon};&nbsp;
+                     Lost : {score.numLost};&nbsp;
+                     Tyles : {score.numCards};&nbsp;
+                     Clicks : {score.numClicks};&nbsp;
+                     Time : {score.gameTime}s
                   </li>
                )}
                <button
@@ -317,7 +333,8 @@ export default function Game () {
       //
       if (loseBoth || winBoth) {
          pauseGame();
-         // First show originla icons in rd or green.
+
+         // First show original icons in red or green.
          //
          thisBoard[highlight[0]].colour = loseBoth ? 'red' : 'green';
          thisBoard[highlight[0]].icon   = copyBoard[highlight[0]].icon;
@@ -344,36 +361,43 @@ export default function Game () {
                thisBoard[highlight[1]].icon   = copyBoard[highlight[0]].icon;
                thisBoard[highlight[1]].won    = false;
             }
+            // See if this click is the winning click.
+            //
+            let wonCount = 0;
+            thisBoard.forEach((thisCard, index) => {
+               if (thisCard.won) wonCount++;
+            });
+            if (wonCount === thisBoard.length) {
+               setTimerAction ((timerAction) => "stop");
+               setWonAllPlay  (true);
+               setGameStarted (false);
+               setGamePaused  (false);
+               startStopGame  ();
+            } else {
+               restartGame();
+            }
             boardRef.current = thisBoard;
             setBoard((b) => thisBoard);
-            restartGame();
          }, 2000);
-         if (loseBoth) setLostBoth     (true);
-         if (winBoth)  setCorrectMatch (true);
-         boardRef.current = thisBoard;
-         setBoard((b) => thisBoard);
+         if (loseBoth) {
+            setLostBoth     (true);
+            setNumLost      ((num) => num + 1);
+         }
+         if (winBoth)  {
+            setCorrectMatch (true);
+            setNumWon       ((num) => num + 1);
+         }
+
+      // First time this card is seen, so set to cyan circle.
+      //
       } else if (card.flipped) {
          thisBoard[card.id].icon     = faCircle;
          thisBoard[card.id].won      = true;
          thisBoard[card.id].colour   = 'cyan';
-
-         boardRef.current = thisBoard;
-         setBoard((b) => thisBoard);
       }
+      boardRef.current = thisBoard;
+      setBoard((b) => thisBoard);
 
-      // See if this click is the winning click.
-      //
-      let wonCount = 0;
-      thisBoard.forEach((thisCard, index) => {
-         if (thisCard.won) wonCount++;
-      });
-      if (wonCount === thisBoard.length) {
-         setWonPlay    (true);
-         setTimerAction ((timerAction) => "stop");
-         setWonAllPlay (true);
-         setGameStarted(false);
-         startStopGame();
-      }
    }
    function scrollToInstructions () {
       instructionsRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -426,8 +450,25 @@ export default function Game () {
                </div>
             </BsCard>
          </Container>
-         {scores.length > 10000000 && <ScoresTable />} {/* Change 10000000 to 0 when scores needed */}
-         {wonAllPlay && <WonModal numClicks={numClicks} gameTime={gameTime} numTyles={numCards} />}
+         {scores.length > 0 &&
+            <>
+            <div style={{marginTop : "25px"}}>
+            </div>
+            <Container fluid> {/* Bootstrap */}
+               <BsCard className={styles.BsCardStyle}>
+                  <ScoresTable />
+               </BsCard>
+            </Container>
+            </>
+         }
+         {wonAllPlay && <WonModal
+            numWon={numWon}
+            numLost={numLost}
+            numClicks={numClicks}
+            gameTime={gameTime}
+            numTyles={numCards}
+            overallScore={calcOverallScore (numWon, numLost, numClicks, gameTime, numCards)}
+         />}
          {/*
          <h5 className={styles.instructionsH} ref={instructionsRef}>Instructions</h5>
          <Instructions />
