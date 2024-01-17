@@ -67,7 +67,7 @@
    box-sizing       : border-box;
 }
 .imgFluid {
-   max-width        : 100%;
+   max-width        : 63%;
    height           : auto;
 }
 .cardStyle {
@@ -129,4 +129,10 @@
 .instructionP {
    padding          : 25px;
    font-size        : large;
+}
+.spacer1 {
+   margin-top       : 25px;
+}
+.spacer2 {
+   margin-top       : 33.333px;
 }

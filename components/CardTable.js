@@ -37,6 +37,9 @@ export default function CardTable ({board, Card, handleTyleClick, numCards}) {
                   won={card.won}
                   colour={card.colour}
                   cardName={card.cardName}
+                  top={card.top}
+                  left={card.left}
+                  rotate={card.rotate}
                />
             </div>
          );

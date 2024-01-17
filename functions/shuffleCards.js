@@ -81,5 +81,15 @@ export default function shuffleCards (cards, numCards, noShuffleTwice) {
   let doubledUp     = [...selectedCards, ...selectedCards];
   let doubledUpR    = randomise (doubledUp);
 
+  // Now add a random offset to each card to make the board look like a card table.
+  //
+  doubledUpR.forEach (card => {
+     doubledUpR = doubledUpR.map((card, index) => ({
+        ...card,
+        top    : Math.floor(Math.random() * 15),
+        left   : Math.floor(Math.random() * 15),
+        rotate : 25 - Math.floor(Math.random() * 50),
+     }));
+  });
   return doubledUpR;
 }

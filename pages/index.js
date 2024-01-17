@@ -436,6 +436,7 @@ export default function Game () {
                         numCards={numCards}
                      />
                   </MtRow>
+                  <div className={styles.spacer2}></div>
                   <Row>
                      <Col xs={12} md={6} lg={6} xl={6}>
                         <Progress />
@@ -444,8 +445,19 @@ export default function Game () {
                         <GameClock gameTime={timeGameTook} action={timerAction}  />
                      </Col>
                   </Row>
-                  {lostBoth && <p>Already won! Next time click on a Cyan circle that matches, from memory!</p>}
-                  {correctMatch && <p>Correct match!</p>}
+                  {lostBoth &&
+                     <>
+                     <p>Already won!</p>
+                     <p>Next time click on a Cyan circle that matches, from memory!</p>
+                     </>
+                  }
+                  {correctMatch &&
+                     <>
+                     <p>Correct match!</p>
+                     <p>&nbsp;</p>
+                     </>
+                  }
+                  {!lostBoth && !correctMatch && <><p>&nbsp;</p><p>&nbsp;</p></>}
                   {gameStarted || <SelectNumCards />}
                </div>
             </BsCard>
