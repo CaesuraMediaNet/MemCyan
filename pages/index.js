@@ -107,7 +107,9 @@ export default function Game () {
       setBoard    (shuffledCards);
       setCopyBoard(shuffledCards);
       boardRef.current  = shuffledCards;
-      setWonAllPlay(false);
+      setWonAllPlay   (false);
+      setLostBoth     (false);
+      setCorrectMatch (false);
       setNumClicks(0);
       setTimerAction ((timerAction) => 'reset');
    }

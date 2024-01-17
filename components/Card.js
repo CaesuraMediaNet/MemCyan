@@ -24,8 +24,8 @@ export default function Card ({id, icon, width, height, clicked, flipped, won, c
       position : "relative",
       width    : "100%",
       height   : "100%",
-      top      : top  + "px",
-      left     : left + "px",
+      top      : won ? "0" : top  + "px",
+      left     : won ? "0" : left + "px",
       transform: won ? "unset" : "rotate(" + rotate + "deg)",
    };
 
