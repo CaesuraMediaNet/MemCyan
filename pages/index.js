@@ -1,11 +1,11 @@
 // MemCyan Game : 
 // 1. Press Start game button
 // 2. An icon appears briefly
-// 3. Click on the icon within the time, icon goes to a Cyan circle.
+// 3. Click on the icon within the time, icon stays turned over.
 // 4. Another icon appears, ditto.
-// 5. If that icon has already been shown, click on that Cyan circle by memory
-// 6. If correct, another Cyan circle
-// 7. If not, both go back to blank image, your Cyan circle is removed.
+// 5. If that icon has already been shown, click on the other matching turned over Tyle
+// 6. If correct, both go Cyan 
+// 7. If not, both go back to blank image, losing both.
 //
 // React.js and Next.js
 // MemCyan.com
@@ -36,7 +36,6 @@ import BsCard from 'react-bootstrap/Card';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
    faUserSecret,
-   faCircle,
 } from '@fortawesome/free-solid-svg-icons'
 
 // Local Components.
@@ -153,7 +152,7 @@ export default function Game () {
       setCorrectMatch (false);
       unFlipAll ();
       setTimerAction ((timerAction) => 'start');
-      let id = setInterval(chooseRandomTyle, 1000);
+      let id = setInterval(chooseRandomTyle, 1500);
       setGameIntervalId (id);
       setGamePaused  (false);
    }
@@ -165,7 +164,7 @@ export default function Game () {
          setTimerAction ((timerAction) => 'stop');
       } else {
          clearBoard ();
-         let id = setInterval(chooseRandomTyle, 1000);
+         let id = setInterval(chooseRandomTyle, 1500);
          setGameIntervalId (id);
          setGameStarted (true);
          setTimerAction ((timerAction) => 'restart');
@@ -331,7 +330,7 @@ export default function Game () {
       });
 
       // On winning or losing show both icons in red or green for a couple of seconds
-      // then set the icons to basic image or cyan circle.
+      // then set the icons to basic image or cyan.
       //
       if (loseBoth || winBoth) {
          pauseGame();
@@ -339,10 +338,8 @@ export default function Game () {
          // First show original icons in red or green.
          //
          thisBoard[highlight[0]].colour = loseBoth ? 'red' : 'green';
-         thisBoard[highlight[0]].icon   = copyBoard[highlight[0]].icon;
          thisBoard[highlight[0]].won    = false;
          thisBoard[highlight[1]].colour = loseBoth ? 'red' : 'green';
-         thisBoard[highlight[1]].icon   = copyBoard[highlight[1]].icon;
          thisBoard[highlight[1]].won    = false;
 
          // Then sometime later show icons that match win or lose. And restart the game.
@@ -350,17 +347,13 @@ export default function Game () {
          setTimeout(function () {
             if (winBoth) {
                thisBoard[highlight[0]].colour = 'cyan';
-               thisBoard[highlight[0]].icon   = faCircle;
                thisBoard[highlight[0]].won    = true;
                thisBoard[highlight[1]].colour = 'cyan';
-               thisBoard[highlight[1]].icon   = faCircle;
                thisBoard[highlight[1]].won    = true;
             } else {
                thisBoard[highlight[0]].colour = copyBoard[highlight[0]].colour;
-               thisBoard[highlight[0]].icon   = copyBoard[highlight[0]].icon;
                thisBoard[highlight[0]].won    = false;
                thisBoard[highlight[1]].colour = copyBoard[highlight[1]].colour;
-               thisBoard[highlight[1]].icon   = copyBoard[highlight[0]].icon;
                thisBoard[highlight[1]].won    = false;
             }
             // See if this click is the winning click.
@@ -380,7 +373,7 @@ export default function Game () {
             }
             boardRef.current = thisBoard;
             setBoard((b) => thisBoard);
-         }, 2000);
+         }, 1500);
          if (loseBoth) {
             setLostBoth     (true);
             setNumLost      ((num) => num + 1);
@@ -390,12 +383,10 @@ export default function Game () {
             setNumWon       ((num) => num + 1);
          }
 
-      // First time this card is seen, so set to cyan circle.
+      // First time this card is seen, so set to always show.
       //
       } else if (card.flipped) {
-         thisBoard[card.id].icon     = faCircle;
          thisBoard[card.id].won      = true;
-         thisBoard[card.id].colour   = 'cyan';
       }
       boardRef.current = thisBoard;
       setBoard((b) => thisBoard);
@@ -429,6 +420,7 @@ export default function Game () {
                      {wonAllPlay && <h5>You&#39;ve won the Game!</h5>}
                   </Col>
                </Row>
+                  <div className={styles.spacer2}></div>
                <div className={styles.desktopMaxWidth}>
                   <MtRow>
                      <CardTable
@@ -450,7 +442,7 @@ export default function Game () {
                   {lostBoth &&
                      <>
                      <p>Already won!</p>
-                     <p>Next time click on a Cyan circle that matches, from memory!</p>
+                     <p>Next time click on a flipped Tyle that matches!</p>
                      </>
                   }
                   {correctMatch &&

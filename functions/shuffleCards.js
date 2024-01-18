@@ -86,9 +86,9 @@ export default function shuffleCards (cards, numCards, noShuffleTwice) {
   doubledUpR.forEach (card => {
      doubledUpR = doubledUpR.map((card, index) => ({
         ...card,
-        top    : Math.floor(Math.random() * 15),
-        left   : Math.floor(Math.random() * 15),
-        rotate : 25 - Math.floor(Math.random() * 50),
+        top    : 0, // Math.floor(Math.random() * 15),
+        left   : 0, // Math.floor(Math.random() * 15),
+        rotate : 0, // 25 - Math.floor(Math.random() * 50),
      }));
   });
   return doubledUpR;
