@@ -32,7 +32,8 @@ export default function Card ({id, icon, width, height, clicked, flipped, won, c
    // Some icons are bigger than others moving the page about.
    //
    let reduceSelectedBigIconStyle = {...selectedStyle, width : "70%"};
-   if (cardName.match (/graduation|cake|chair|sailboat|snowflake|bong|bagshopping|bucket/i)) {
+   let wibble = true;
+   if (wibble && cardName.match (/image|graduation|cake|chair|sailboat|snowflake|bong|bagshopping|bucket/i)) {
        selectedStyle = reduceSelectedBigIconStyle;
    }
    return (

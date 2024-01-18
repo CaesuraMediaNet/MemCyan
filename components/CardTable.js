@@ -1,6 +1,10 @@
 // Card table of Tyles (aka Cards).
 //
 export default function CardTable ({board, Card, handleTyleClick, numCards}) {
+   // AKJC HERE - a table in CSS display:table/table-row/table-cell
+   // AKJC HERE - https://stackoverflow.com/questions/19089115/relative-div-height
+   // AKJC HERE - to avoid having to resize the icons themselves which still shifts the rows if all
+   // AKJC HERE - icons in a row are the 70% ones. See components/Card.js : wibble
    return board.map (card => {
          let width = "25%";
          switch (parseInt (numCards)) {
