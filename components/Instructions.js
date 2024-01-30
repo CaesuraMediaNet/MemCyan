@@ -20,7 +20,7 @@ function handleTyleClick () {
 }
 
 
-import {startBoard, oneFlipped, wonBoard, twoMatching, twoLost, twoWon} from '../components/boards';
+import {startBoard, oneFlipped, showBoard, wonBoard, twoMatching, twoLost, twoWon} from '../components/boards';
 
 export default function Instructions () {
    return (
@@ -32,7 +32,7 @@ export default function Instructions () {
                </p>
                <MtRow>
                   <CardTable
-                     board={wonBoard}
+                     board={showBoard}
                      Card={Card}
                      handleTyleClick={handleTyleClick}
                      numCards={12}

@@ -67,6 +67,7 @@ export const initBoard = [
 // Using slice() to make copies so they don't affect each other.
 //
 export const startBoard     = shuffleCards(initBoard.slice(), 12, true);
+export const showBoard      = startBoard.slice().map((card) => ({...card, won : true}));
 export const wonBoard       = startBoard.slice().map((card) => ({...card, won : true, colour : 'cyan'}));
 export const oneFlipped     = startBoard.slice().map((card) => ({...card, flipped : card.id == 1 ? true : false}));
 export const twoMatching    = startBoard.slice().map((card) => ({...card, flipped : card.icon === faBucket ? true : false}));
