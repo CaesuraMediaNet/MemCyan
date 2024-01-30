@@ -36,6 +36,7 @@ import BsCard from 'react-bootstrap/Card';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
    faUserSecret,
+   faCircleQuestion,
 } from '@fortawesome/free-solid-svg-icons'
 
 // Local Components.
@@ -54,6 +55,7 @@ import PrivacyPolicy from '../components/PrivacyPolicy';
 import shuffleCards from '../functions/shuffleCards';
 import flipCard from '../functions/flipCard';
 import {addScore, getScores, clearScores} from '../functions/scores';
+import useWindowSize  from '../functions/useWindowSize';
 
 // Clues : The GameClock sets the timer and when told to stop (in handleTyleClick after calcs have been
 // done to see if game is complete) then calls timeGameTook (via it's gameTime prop). timeGameTook
@@ -87,6 +89,7 @@ export default function Game () {
    const gameLevelRef                              = useRef ();
    const instructionsRef                           = useRef ();
    const boardRef                                  = useRef (board);
+   const { width, height }                         = useWindowSize();
 
    // When all loaded up, then shuffle the cards to avoid a hydration error.
    // useState (shuffleCards(initBoard.slice()) gave hydration errors.
@@ -469,11 +472,14 @@ export default function Game () {
             <BsCard className={styles.BsCardStyle}> {/* Bootstrap and CML */}
                <h1>MemCyan</h1>
                <h1
-                  className={styles.navIconRight}
+                  className={width > 300 ? styles.navIconRight : styles.blank}
                   onClick={() => scrollToInstructions()}
                   title={"Instructions"}
                >
-                  ?
+                  <FontAwesomeIcon
+                     className={styles.navIconPrivacy}
+                     icon={faCircleQuestion}
+                  />
                </h1>
                <Row>
                   <Col md={6}>
