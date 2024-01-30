@@ -4,10 +4,10 @@ import { useState }          from 'react';
 import { useEffect }         from 'react';
 import { useRef }            from 'react';
 import { FontAwesomeIcon }   from '@fortawesome/react-fontawesome'
-import { faImage, faSpaghettiMonsterFlying }           from '@fortawesome/free-solid-svg-icons'
+import { faImage, faUserSecret, }           from '@fortawesome/free-solid-svg-icons'
 import styles                from '../styles/memcyan.module.css';
 
-export default function Card ({id, icon, width, height, clicked, flipped, won, colour, cardName, top, left, rotate}) {
+export default function Card ({id, icon, width, height, clicked, flipped, won, colour, cardName, top, left, rotate, singleWon}) {
 
    // Next.js CSS Modules come in as classes, here we want CSS styles, not classNames.
    //
@@ -32,15 +32,12 @@ export default function Card ({id, icon, width, height, clicked, flipped, won, c
    // Some icons are bigger than others moving the page about.
    //
    let reduceSelectedBigIconStyle = {...selectedStyle, width : "70%"};
-   let wibble = true;
-   if (wibble && cardName.match (/image|graduation|cake|chair|sailboat|snowflake|bong|bagshopping|bucket/i)) {
+   if (cardName.match (/image|graduation|cake|chair|sailboat|snowflake|bong|bagshopping|bucket/i)) {
        selectedStyle = reduceSelectedBigIconStyle;
    }
    return (
        <div style={thisCardStyle}  onClick={clicked} >
-           {won ?
-               <FontAwesomeIcon style={selectedStyle} icon={icon} />
-               : flipped ?
+           {won || flipped ?
                <FontAwesomeIcon style={selectedStyle} icon={icon} />
                :
                <FontAwesomeIcon style={blankStyle}    icon={faImage} />

@@ -44,6 +44,7 @@ export default function CardTable ({board, Card, handleTyleClick, numCards}) {
                   top={card.top}
                   left={card.left}
                   rotate={card.rotate}
+                  singleWon={card.singleWon}
                />
             </div>
          );

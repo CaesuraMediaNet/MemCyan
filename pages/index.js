@@ -64,6 +64,7 @@ import {addScore, getScores, clearScores} from '../functions/scores';
 export default function Game () {
 
    const [board, setBoard]                         = useState (initBoard);
+   const [gameLevel, setGameLevel]                 = useState (1);
    const [copyBoard, setCopyBoard]                 = useState (initBoard);
    const [wonAllPlay, setWonAllPlay]               = useState (false);
    const [numCards, setNumCards]                   = useState (12);
@@ -82,9 +83,10 @@ export default function Game () {
    const [highlight,setHighlight]                  = useState ([]);
    const [showGooglePlay,setShowGooglePlay]        = useState (false);
 
-   const numCardsRef                               = useRef();
-   const instructionsRef                           = useRef();
-   const boardRef                                  = useRef(board);
+   const numCardsRef                               = useRef ();
+   const gameLevelRef                              = useRef ();
+   const instructionsRef                           = useRef ();
+   const boardRef                                  = useRef (board);
 
    // When all loaded up, then shuffle the cards to avoid a hydration error.
    // useState (shuffleCards(initBoard.slice()) gave hydration errors.
@@ -119,7 +121,7 @@ export default function Game () {
       //
       let nonWonArr = [];
       thisBoard.forEach((thisCard, index) => {
-         if (!thisCard.won) {
+         if (!thisCard.won && !thisCard.singleWon) {
             nonWonArr.push(index);
          }
       });
@@ -188,6 +190,26 @@ export default function Game () {
          >
             {gameStarted || gamePaused ? 'Stop Game' : 'Start Game'}
          </button>
+      );
+   }
+   function changeGameLevel () {
+      setGameLevel (parseInt (gameLevelRef.current.value));
+      clearBoard ();
+   }
+   function GameLevel () {
+      return (
+         <Form>
+            <Form.Label>Select Game Level</Form.Label>
+            <Form.Select
+               ref={gameLevelRef}
+               onChange={() => changeGameLevel ()}
+               aria-label="Select Game Level"
+               value={gameLevelRef?.current?.value || "1"}
+            >
+               <option value="1">One</option>
+               <option value="2">Two</option>
+            </Form.Select>
+         </Form>
       );
    }
    function changeNumCards () {
@@ -293,6 +315,7 @@ export default function Game () {
 
       // First find the cardName for the one we are trying to match.
       // It will be the only one flipped and not won.
+      // The clicked card, card.cardName, could be any card.
       //
       let thisCardName = "Not found";
       thisBoard.forEach((thisCard, index) => {
@@ -301,30 +324,55 @@ export default function Game () {
 
       thisBoard.forEach((thisCard, index) => {
 
-         // Card names match but is not the same card and both cards flipped - one by timer (thisCard), one by
-         // clicking on it (card).
+         // Level 1 : Card names match but is not the same card and both cards flipped - one by timer (thisCard), one by
+         //           clicking on it (card).
+         // Level 2 : Card names match but is not the same card and either card is singleWon.
          //
          if (
-            card.cardName   === thisCard.cardName
-            && thisCardName === card.cardName
-            && card.id      !== thisCard.id
-            && card.flipped
-            && thisCard.flipped
+            gameLevel === 1 && (
+               card.cardName   === thisCard.cardName
+               && thisCardName === card.cardName
+               && card.id      !== thisCard.id
+               && card.flipped
+               && thisCard.flipped
+            ) || gameLevel === 2 && (
+               card.cardName   === thisCard.cardName
+               && thisCardName === card.cardName
+               && card.id      !== thisCard.id
+               && (thisCard.singleWon || card.singleWon)
+            )
          ) {
 
             // Highlight red for lose both, green for win both.
             //
-            highlight                    =  [index, card.id];
+            highlight =  [index, card.id];
+            console.log ("highlight : ", thisBoard[highlight[0]].cardName, thisBoard[highlight[1]].cardName);
 
-            // If clicked card matches a won card, then lose both.
-            //
-            if (thisCard.won) {
-               loseBoth = true;
+            if (gameLevel === 1) {
 
-            // If the clicked card (card) is won then win the matching card.
-            //
-            } else if (card.won) {
-               winBoth  = true;
+               // If clicked card matches a won card, then lose both.
+               //
+               if (thisCard.won) {
+                  loseBoth = true;
+
+               // If the clicked card (card) is won then win the matching card.
+               //
+               } else if (card.won) {
+                  winBoth  = true;
+               }
+
+            } else if (gameLevel === 2) {
+
+               // If clicked card matches a singleWon card, then lose both.
+               //
+               if (thisCard.singleWon) {
+                  loseBoth = true;
+
+               // If the clicked card (card) is singleWon then win the matching card.
+               //
+               } else if (card.singleWon) {
+                  winBoth  = true;
+               }
             }
          }
       });
@@ -335,12 +383,22 @@ export default function Game () {
       if (loseBoth || winBoth) {
          pauseGame();
 
-         // First show original icons in red or green.
+         // First show original icons in red (lose both) or green (win both).
          //
-         thisBoard[highlight[0]].colour = loseBoth ? 'red' : 'green';
-         thisBoard[highlight[0]].won    = false;
-         thisBoard[highlight[1]].colour = loseBoth ? 'red' : 'green';
-         thisBoard[highlight[1]].won    = false;
+         thisBoard[highlight[0]].colour    = loseBoth ? 'red' : 'green';
+         thisBoard[highlight[0]].won       = false;
+         thisBoard[highlight[0]].singleWon = false;
+
+         thisBoard[highlight[1]].colour    = loseBoth ? 'red' : 'green';
+         thisBoard[highlight[1]].won       = false;
+         thisBoard[highlight[1]].singleWon = false;
+
+         // Level 2 : Flip both cards so we can see them in red or green.
+         //
+         if (gameLevel === 2) {
+            thisBoard[highlight[0]].flipped = true;
+            thisBoard[highlight[1]].flipped = true;
+         }
 
          // Then sometime later show icons that match win or lose. And restart the game.
          //
@@ -383,10 +441,14 @@ export default function Game () {
             setNumWon       ((num) => num + 1);
          }
 
-      // First time this card is seen, so set to always show.
+      // First time this card is seen, so set to always show for Level 1 and turn it back over for Level 2 and mark it as singleWon.
       //
       } else if (card.flipped) {
-         thisBoard[card.id].won      = true;
+         if (gameLevel === 1) {
+            thisBoard[card.id].won       = true;
+         } else if (gameLevel === 2) {
+            thisBoard[card.id].singleWon = true;
+         }
       }
       boardRef.current = thisBoard;
       setBoard((b) => thisBoard);
@@ -416,6 +478,11 @@ export default function Game () {
                   <Col md={6}>
                      <ClearButton />
                   </Col>
+                  {gameStarted ||
+                  <Col md={12}>
+                     <GameLevel />
+                  </Col>
+                  }
                   <Col md={12}>
                      {wonAllPlay && <h5>You&#39;ve won the Game!</h5>}
                   </Col>
