@@ -7,7 +7,7 @@ import { FontAwesomeIcon }   from '@fortawesome/react-fontawesome'
 import { faImage, faUserSecret, }           from '@fortawesome/free-solid-svg-icons'
 import styles                from '../styles/memcyan.module.css';
 
-export default function Card ({id, icon, width, height, clicked, flipped, won, colour, cardName, top, left, rotate, singleWon}) {
+export default function Card ({id, icon, width, height, clicked, flipped, won, colour, cardName, top, left, border, singleWon}) {
 
    // Next.js CSS Modules come in as classes, here we want CSS styles, not classNames.
    //
@@ -21,12 +21,13 @@ export default function Card ({id, icon, width, height, clicked, flipped, won, c
    let selectedStyle      = {...iconStyle};
 
    let thisCardStyle = {
-      position  : "relative",
-      width     : "100%",
-      height    : "100%",
-      top       : top  + "px",
-      left      : left + "px",
-      transform : "rotate(" + rotate + "deg)",
+      position     : "relative",
+      width        : "100%",
+      height       : "100%",
+      top          : top  + "px",
+      left         : left + "px",
+      border       : border ? "1px solid cyan" : "unset",
+      borderRadius : "10px",
    };
 
    // Some icons are bigger than others moving the page about.

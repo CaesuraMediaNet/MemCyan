@@ -131,6 +131,10 @@ export default function Game () {
       //
       thisBoard.forEach((thisCard, index) => {
          thisBoard[index].flipped = false;
+         thisBoard[index].border  = false; // reset the  border so it only shows for Nms
+
+         // Flip the random card and all other won ones.
+         //
          if (index === cardNum || thisCard.won) thisBoard[index].flipped = true;
       });
       boardRef.current = thisBoard;
@@ -306,7 +310,7 @@ export default function Game () {
       setNumClicks((nc) => nc + 1);
       let thisBoard               = JSON.parse(JSON.stringify(boardRef.current));
 
-      // Difficulty level two : if a tyle matches one already won, lose both, but if clicked one
+      // If a tyle matches one already won, lose both, but if clicked one
       // matches a won one then set clicked one won.
       //
       let loseBoth  = false;
@@ -320,6 +324,7 @@ export default function Game () {
       let thisCardName = "Not found";
       thisBoard.forEach((thisCard, index) => {
          if (thisCard.flipped && ! thisCard.won) thisCardName = thisCard.cardName;
+         if (thisCard.id === card.id) thisBoard[card.id].border = true;
       });
 
       thisBoard.forEach((thisCard, index) => {
@@ -346,7 +351,6 @@ export default function Game () {
             // Highlight red for lose both, green for win both.
             //
             highlight =  [index, card.id];
-            console.log ("highlight : ", thisBoard[highlight[0]].cardName, thisBoard[highlight[1]].cardName);
 
             if (gameLevel === 1) {
 
@@ -388,10 +392,12 @@ export default function Game () {
          thisBoard[highlight[0]].colour    = loseBoth ? 'red' : 'green';
          thisBoard[highlight[0]].won       = false;
          thisBoard[highlight[0]].singleWon = false;
+         thisBoard[highlight[0]].border    = false;
 
          thisBoard[highlight[1]].colour    = loseBoth ? 'red' : 'green';
          thisBoard[highlight[1]].won       = false;
          thisBoard[highlight[1]].singleWon = false;
+         thisBoard[highlight[1]].border    = false;
 
          // Level 2 : Flip both cards so we can see them in red or green.
          //
