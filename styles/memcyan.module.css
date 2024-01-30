@@ -38,6 +38,9 @@
    max-height       : 0px;
    opacity          : 0;
 }
+.blank {
+
+}
 .navIcon {
    width            : 50px;
    color            : dimgrey;

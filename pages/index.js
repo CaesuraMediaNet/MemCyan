@@ -196,7 +196,7 @@ export default function Game () {
       setGameLevel (parseInt (gameLevelRef.current.value));
       clearBoard ();
    }
-   function GameLevel () {
+   function SelectGameLevel () {
       return (
          <Form>
             <Form.Label>Select Game Level</Form.Label>
@@ -478,11 +478,11 @@ export default function Game () {
                   <Col md={6}>
                      <ClearButton />
                   </Col>
-                  {gameStarted ||
                   <Col md={12}>
-                     <GameLevel />
+                     <div className={gameStarted ? styles.hidden : styles.blank}>
+                        <SelectGameLevel />
+                     </div>
                   </Col>
-                  }
                   <Col md={12}>
                      {wonAllPlay && <h5>You&#39;ve won the Game!</h5>}
                   </Col>
@@ -519,7 +519,9 @@ export default function Game () {
                      </>
                   }
                   {!lostBoth && !correctMatch && <><p>&nbsp;</p><p>&nbsp;</p></>}
-                  {gameStarted || <SelectNumCards />}
+                  <div className={gameStarted ? styles.hidden : styles.blank}>
+                     <SelectNumCards />
+                  </div>
                </div>
             </BsCard>
          </Container>
