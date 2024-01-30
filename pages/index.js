@@ -462,7 +462,6 @@ export default function Game () {
          <Container fluid> {/* Bootstrap */}
             <BsCard className={styles.BsCardStyle}> {/* Bootstrap and CML */}
                <h1>MemCyan</h1>
-               {/*
                <h1
                   className={styles.navIconRight}
                   onClick={() => scrollToInstructions()}
@@ -470,7 +469,6 @@ export default function Game () {
                >
                   ?
                </h1>
-               */}
                <Row>
                   <Col md={6}>
                      <StartStopButton />
@@ -544,10 +542,8 @@ export default function Game () {
             numTyles={numCards}
             overallScore={calcOverallScore (numWon, numLost, numClicks, gameTime, numCards)}
          />}
-         {/*
          <h5 className={styles.instructionsH} ref={instructionsRef}>Instructions</h5>
          <Instructions />
-         */}
          <Container fluid> {/* Bootstrap */}
             <footer className={styles.footer}>
                <Row>

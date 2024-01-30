@@ -20,7 +20,7 @@ function handleTyleClick () {
 }
 
 
-import {startBoard, wonBoard, twoMatching, twoLost, twoWon} from '../components/boards';
+import {startBoard, oneFlipped, wonBoard, twoMatching, twoLost, twoWon} from '../components/boards';
 
 export default function Instructions () {
    return (
@@ -52,10 +52,34 @@ export default function Instructions () {
 
                <p className={styles.instructionP}>
                   The game starts when pressing the Start Game button and the game will show one random Tyle
-                  at a time.  You have to click on the Tyle in time, and the Tyle goes to a blue circle.
-                  The game is to fill the screen with blue circles.
-                  The only thing is - you have to click on a matching image if one is already shown.
-                  If you click on one shown that already has a partner blue circled, then you lose them  both:
+                  at a time.  You have to click on the Tyle in time, and the Tyle stays flipped (Game Level One) or 
+                  is turned back over (Game Level Two).
+               </p>
+               <MtRow>
+                  <CardTable
+                     board={oneFlipped}
+                     Card={Card}
+                     handleTyleClick={handleTyleClick}
+                     numCards={12}
+                  />
+               </MtRow>
+               <p className={styles.instructionP}>
+                  If a random Tyle matches one that's already been seen then
+                  you have to click on the original Tyle.  For Game Level One it will be already shown, but
+                  for Game Level Two, it won't.
+               </p>
+               <MtRow>
+                  <CardTable
+                     board={twoMatching}
+                     Card={Card}
+                     handleTyleClick={handleTyleClick}
+                     numCards={12}
+                  />
+               </MtRow>
+               <p className={styles.instructionP}>
+                  If you click on the one just turned over and there is a
+                  matching Tyle on the board, then you lose both and the Tyle colours go briefly red and the
+                  game continues : 
                </p>
                <MtRow>
                   <CardTable
@@ -65,10 +89,9 @@ export default function Instructions () {
                      numCards={12}
                   />
                </MtRow>
-
                <p className={styles.instructionP}>
-                  However, if you remember where its maching Tyle is and click on  that then 
-                  you win both, and they turn to blue circles, safe.
+                  Or if you successfully click on the right Tyle 
+                  you win both and the Tyle colours will go green, then cyan.
                </p>
                <MtRow>
                   <CardTable
@@ -78,7 +101,17 @@ export default function Instructions () {
                      numCards={12}
                   />
                </MtRow>
-
+               <p className={styles.instructionP}>
+                  So the task is to turn all Tyles cyan : 
+               </p>
+               <MtRow>
+                  <CardTable
+                     board={wonBoard}
+                     Card={Card}
+                     handleTyleClick={handleTyleClick}
+                     numCards={12}
+                  />
+               </MtRow>
                <p className={styles.instructionP}>
                   You can change the number of Tyles on the board with the selector under the game.  We have
                   started you on 12, but you can select 4 (easy!), 12, 16, 20, 36, 42 or if you are
@@ -86,9 +119,8 @@ export default function Instructions () {
                </p>
 
                <p className={styles.instructionP}>
-                  You can clear the board in the middle of the game using the Clear Board button at the top :
+                  You can clear the board in the middle of the game using the Clear Board button at the top.
                </p>
-               <img className={styles.imgFluid} src="/img/clearBoardButton.png" />
 
                <p className={styles.instructionP}>
                   Your scores are in the Past Scores section.  They are saved in Cookies, so no scores are

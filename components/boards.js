@@ -67,62 +67,8 @@ export const initBoard = [
 // Using slice() to make copies so they don't affect each other.
 //
 export const startBoard     = shuffleCards(initBoard.slice(), 12, true);
-export const wonBoard       = startBoard.slice().map((card) => ({...card, flipped : true}));
+export const wonBoard       = startBoard.slice().map((card) => ({...card, won : true, colour : 'cyan'}));
+export const oneFlipped     = startBoard.slice().map((card) => ({...card, flipped : card.id == 1 ? true : false}));
 export const twoMatching    = startBoard.slice().map((card) => ({...card, flipped : card.icon === faBucket ? true : false}));
 export const twoLost        = startBoard.slice().map((card) => ({...card, flipped : card.icon === faBucket ? true : false, colour :  card.icon === faBucket ? 'red' : 'green'}));
 export const twoWon         = startBoard.slice().map((card) => ({...card, flipped : card.icon === faBucket ? true : false, colour :  card.icon === faBucket ? 'green' : 'red'}));
-
-// Two mismatching - there are two of each, so we only need to set one of each, faCandyCane and one faSnowman.
-//
-let seenfaCandyCane   = false;
-let seenfaSnowman = false;
-export const twoMisMatching = startBoard.slice().map((card, index) => {
-   if (
-      (seenfaCandyCane && card.icon === faCandyCane)
-      ||
-      (seenfaSnowman && card.icon === faSnowman)
-   ) {
-      return {...card};
-   } else {
-      let newCard = {
-         ...card,
-         flipped : (card.icon === faCandyCane && !seenfaCandyCane) || (card.icon === faSnowman && !seenfaSnowman) ? true : false
-      }
-      if (card.icon === faCandyCane  ) seenfaCandyCane  = true;
-      if (card.icon === faSnowman) seenfaSnowman = true;
-      return newCard;
-   }
-});
-
-// Just one selected, the first rokcet.
-//
-let justOneSeen = false;
-export const oneSelected    = startBoard.slice().map((card) => {
-   if (justOneSeen) {
-      return ({...card});
-   } else {
-      let newCard = {...card, flipped : card.icon === faCandyCane ? true : false};
-      justOneSeen = card.icon === faCandyCane;
-      return newCard;
-   }
-   
-});
-
-// Two won, two mismatched ones selected
-//
-let seenHippo    = false;
-let seenfaHatWizard = false;
-export const twoMatchedNext = twoMatching.slice().map((card) => {
-   if (card.icon === faHippo || card.icon === faHatWizard) {
-      let newCard = 
-      {
-            ...card,
-            flipped : (!seenHippo && card.icon === faHippo) || (!seenfaHatWizard && card.icon === faHatWizard)
-        };
-      if (card.icon === faHippo) seenHippo       = true;
-      if (card.icon === faHatWizard) seenfaHatWizard = true;
-      return newCard;
-   } else {
-      return ({...card});
-   }
-});
