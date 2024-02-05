@@ -9,7 +9,7 @@
 8. Level Two - the icons don't show cyan when clicked upon, meaning you have to remember them!
 
 React.js and Next.js
-[https://memcyan.com memcyan.com]
+https://memcyan.com
 
 Copyright (c) 2024 Caesura Media Limited
 
