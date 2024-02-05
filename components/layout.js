@@ -23,8 +23,8 @@ export default function Layout({ children, home }) {
       <meta name="format-detection"      content="address=yes" />
       <meta name="format-detection"      content="email=no" />
       <meta name="theme-color"           content="#f1fdf4" />
-      <meta name="description"           content="Mem Cyan Game : click on ever changing tyles to complete the grid, not clicking on a matching tyle!" />
-      <meta name="keywords"              content="Memory, Game, Tyles, Cyan, Dot, Caesura" />
+      <meta name="description"           content="MemCyan Game : Fast paced memory game!" />
+      <meta name="keywords"              content="Memory, Game, Tyles, Cyan, Caesura" />
       <meta name="author"                content="Caesura Media Limited" />
       <meta name="viewport"              content="width=device-width, initial-scale=1, shrink-to-fit=no" />
       <meta httpEquiv="X-UA-Compatible"  content="IE=edge,chrome=1" />
@@ -41,12 +41,12 @@ export default function Layout({ children, home }) {
       <meta name="twitter:site"         content="@andykjcragg" />
       <meta name="twitter:creator"      content="@andykjcragg" />
       <meta name="twitter:title"        content="MemCyan" />
-      <meta name="twitter:description"  content="MemCyan Game : click on ever changing tyles to complete the grid, not clicking on a matching tyle!" />
+      <meta name="twitter:description"  content="MemCyan Game : Fast paced memory game!" />
       <meta name="twitter:image"        content="https://memcyan.vercel.app/img/memcyan-logo.png" />
 
       <meta property="og:url"              content="https://memcyan.vercel.app/" />
       <meta property="og:title"            content="MemCyan" />
-      <meta property="og:description"      content="MemCyan Game : click on ever changing tyles to complete the grid, not clicking on a matching tyle!" />
+      <meta property="og:description"      content="MemCyan Game : Fast paced memory game!" />
       <meta property="og:type"             content="website" />
       <meta property="og:image"            content="https://memcyan.vercel.app/img/memcyan-logo.png" />
       <meta property="og:image:secure_url" content="https://memcyan.vercel.app/img/memcyan-logo.png" />
