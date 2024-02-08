@@ -73,6 +73,7 @@ export default function Game () {
    const [wonAllPlay, setWonAllPlay]               = useState (false);
    const [numCards, setNumCards]                   = useState (12);
    const [numClicks, setNumClicks]                 = useState (0);
+   const [lastCardNum, setLastCardNum]             = useState (0);
    const [gameTime,setGameTime]                    = useState (0);
    const [numWon, setNumWon]                       = useState (0);
    const [numLost, setNumLost]                     = useState (0);
@@ -126,11 +127,12 @@ export default function Game () {
       //
       let nonWonArr = [];
       thisBoard.forEach((thisCard, index) => {
-         if (!thisCard.won && !thisCard.singleWon) {
+         if (!thisCard.won && !thisCard.singleWon && lastCardNum !== index) {
             nonWonArr.push(index);
          }
       });
       let cardNum = nonWonArr[Math.floor(Math.random() * nonWonArr.length)];
+      setLastCardNum ((num) => cardNum);
 
       // Clear all flipped cards/tyles and set the random one to be flipped.
       //
@@ -163,6 +165,7 @@ export default function Game () {
       setCorrectMatch (false);
       unFlipAll ();
       setTimerAction ((timerAction) => 'start');
+      chooseRandomTyle ();
       let id = setInterval(chooseRandomTyle, 1500);
       setGameIntervalId (id);
       setGamePaused  (false);
@@ -175,6 +178,7 @@ export default function Game () {
          setTimerAction ((timerAction) => 'stop');
       } else {
          clearBoard ();
+         chooseRandomTyle ();
          let id = setInterval(chooseRandomTyle, 1500);
          setGameIntervalId (id);
          setGameStarted (true);
