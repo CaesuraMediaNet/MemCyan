@@ -28,6 +28,7 @@ export default function Card ({id, icon, width, height, clicked, flipped, won, c
       left         : left + "px",
       border       : border ? "1px solid cyan" : "unset",
       borderRadius : "10px",
+      padding      : "5px",
    };
 
    // Some icons are bigger than others moving the page about.
