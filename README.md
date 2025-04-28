@@ -11,5 +11,5 @@
 React.js and Next.js
 https://memcyan.com
 
-Copyright (c) 2024 Caesura Media Limited
+Copyright (c) 2025 Caesura Media Limited
 
